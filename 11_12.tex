@@ -1,0 +1,303 @@
+\documentclass[a4,12pt]{article}
+%\documentclass[a4,11pt]{jsarticle}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtools}
+\usepackage{ascmac}
+\usepackage{empheq}
+%\usepackage[dvips]{graphicx}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{wrapfig}
+
+\newtheorem{thm}{定理}
+\newtheorem{dfn}{定義}
+\newtheorem{prf}{証明}
+\newtheorem{hyp}{仮定}
+\newtheorem{rem}{注意}
+\newtheorem{lem}{補題}
+
+\renewcommand{\baselinestretch}{1.3}
+%\renewcommand{\arraystretch}{2}
+\topmargin=-1cm
+\textheight=22cm
+\oddsidemargin=0cm
+\textwidth=16cm
+
+\title{境界における反射による誤差評価}
+\author{九澤俊介}
+\date{2021年11月5日}
+\begin{document}
+\maketitle
+\section{問題}
+$T>0,\ t\in[0,T],\;f \in C^{0} ([0,T] \times \mathbb{R}^d \times \mathbb{R}^d )$に対し以下の微分方程式$x(t),\; v(t):[0,T]\rightarrow\mathbb{R}^d$について考える.ただし$x_0,v_0$は与えられているものとする.
+\begin{equation}
+\begin{cases}
+\dot{x}(t)=v(t)\\
+\dot{v}(t)=f(t,x(t),v(t))\\
+x(0)=x_0\\
+v(0)=v_0
+\end{cases}
+\end{equation}
+上記の問題に対して$y(t),g(t,y(t))$を以下のように定義する.\\ただし$y(t):[0,T]\rightarrow\mathbb{R}^d\times\mathbb{R}^d,\;g\in C^0([0,T]\times\mathbb{R}^d)$.
+\begin{equation}
+\begin{cases}
+y(t)\coloneqq (x(t),v(t))^T\\
+g(t,y(t))\coloneqq (v(t),f(t,y(t)))^T
+\end{cases}
+\end{equation}
+\begin{equation}
+\begin{cases}
+\dot{y}(t)=g(t,y(t))\\
+y(0)=y_0
+\end{cases}
+\end{equation}
+とし$y(t)$についての問題とする.
+\section{数値解法}
+$N\in\mathbb{N},T>0$に対して
+\begin{equation}
+\begin{cases}
+\tau\coloneqq \lfloor\frac{T}{N}\rfloor \\
+t_k\coloneqq k\tau\ (k=0,1,\ldots ,N)\\
+y^k\sim y(t_k) \ (k=0,1,\ldots ,N)
+\end{cases}
+\end{equation}
+$G(t_k,y^k;\tau)$を$1$段階法のschemeとして数値解$y^k$を繰り返し求めていく.
+\begin{equation}
+\begin{cases}\displaystyle\frac{y^{k+1}-y^k}{\tau}=G(t_k,y^k;\tau)\\
+y^0:y^*
+\end{cases}
+\end{equation}
+ただし$G(t_k,y^k;\tau)$は以下のリプシッツ条件を仮定する.
+\begin{hyp}
+\label{lip}
+\[{}^\exists\tau_0 > 0\; {}^\exists L>0\; s.t.\; |G(t,y;\tau)-G(t,z;\tau)|\leq L|y-z|\]
+\[(0\leq t\leq T,\  y,z\in\mathbb{R}^{2d},\tau\in(0,\tau_0))\]
+\end{hyp}
+\subsection{1段階法}
+$G(t_k,y^k;\tau)$が以下の場合\\
+\\(i)オイラー法の場合
+\[G(t_k,y^k;\tau)=g(t_k,y^k)\]
+(ii)ルンゲクッタ法の場合
+\[G(t_k,y^k;\tau)=\frac{1}{6}(\ell_1+2\ell_2+2\ell_3+\ell_4)\]
+\[\begin{cases}
+\ell_1=g(t_k,y^k)\\
+\ell_2=g(t_k+\displaystyle\frac{\tau}{2},y^k+\frac{\tau}{2}\ell_1)\\
+\ell_3=g(t_k+\displaystyle\frac{\tau}{2},y^k+\frac{\tau}{2}\ell_2)\\ 
+\ell_4=g(t_k,y^k+\tau \ell_3)
+\end{cases}\]
+\subsection{打ち切り誤差}
+$T>0,t\in[0,T]$において$y(t)$を十分滑らかな関数とし、その数値解を$y$とする.この時$G(t,y;\tau)$の打ち切り誤差を$\epsilon(t;\tau)$とする.
+\begin{dfn}\[\epsilon(t;\tau)\coloneqq\frac{y(t+\tau)-y(t)}{\tau}-G(t,y;\tau)\]\end{dfn}
+次を満たす$t$と$\tau$に依存しない定数$C_G=C_G[y]$が存在するとき,$G$を$p$次の精度という.任意の$\tau>0,0<t<T-\tau$に対して
+\begin{equation}
+|\epsilon(t;\tau)|\leq C_G\tau^p
+\end{equation}
+（例）
+\subsection{誤差}
+厳密解と数値解の誤差を$r^k\coloneqq y(t_k)-y^k\ (k=0,1,\ldots,N)$とする.
+\begin{thm}\label{th1}仮定$\ref{lip}$と(6)を満たすとき,$k=0,1,\ldots ,N,t\in[0,T]$に対して
+\[|r^{k}|\leq |r_0|+C_0T\tau^{p}\]
+が成り立つ.
+\end{thm}
+\begin{prf}
+\[\begin{split}
+\frac{r^{k+1}-r^k}{\tau}&=\frac{y(t_{k+1})-y^{k+1}}{\tau}- \frac{y(t_k)-y^k}{\tau}\\
+&=\frac{y(t_k+\tau)-y(t_k)}{\tau}- \frac{y^{k+1}-y^k}{\tau}\\
+&=\frac{y(t_k+\tau)-y(t_k)}{\tau}-G(t_k,y^k;\tau)\\
+r^{k+1}&=r^k+\tau\epsilon(t^k;\tau)\\
+|r^{k+1}|&=|r^k|+\tau |\epsilon(t^k;\tau)|\\
+&\leq |r^k|+C_0\tau^{p+1}\\
+\therefore |r^{k+1}|&\leq |r^k|+C_0\tau^{p+1}
+\end{split}\]
+$|r_0|$を用いると
+\[\begin{split}
+|r^{k+1}|&\leq |r_0|+(k+1)C_0\tau^{p+1}
+\end{split}\]
+したがって$|r^{k}|\leq |r_0|+kC_0\tau^{p+1}$より
+\[|r^{k}|\leq |r_0|+C_0T\tau^{p}\]
+さらに$|r_0|=0$とすると
+\[|r^{k}|\leq C_0T\tau^{p}\]
+\end{prf}
+が成立する.\qed
+\section{反射}
+閉じた領域内を粒子が移動すると仮定する.その時粒子が領域の境界と接触し、跳ね返ることを反射とする.
+以下速度べクトル$\dot{x}(t)$の境界に対する垂直方向の大きさが反射の前後で変化しない完全反射を前提に考える.\\
+$T>0,\;\Omega$を十分滑らかな境界を持つ領域とする.$\nu$を境界上の法線外向き単位ベクトルとする.\\
+
+$x(t)\in C^{0}([0,T];\overline{\Omega})$に対して
+\[\begin{cases}
+I_{\Omega}\coloneqq \{t\in[0,T];\ x(t)\in\Omega\}\\
+I_{\partial\Omega}\coloneqq \{t\in(0,T);\ x(t)\in\partial\Omega\}
+\end{cases}\]
+とする.\\
+以下では
+\begin{equation}\left\{\begin{aligned}
+&x \in C^0([0,T];\overline{\Omega})\cap W^{1,\infty}(0,T;\mathbb{R}^d) \cap C^2(I_\Omega ;\mathbb{R}^d) \\
+&\dot{x} \in \text{BV}\ (0,T;\mathbb{R}^d)
+\end{aligned}\right.\end{equation}
+と仮定する.このとき、
+\[{}^{\exists} v^{\pm}(t)=\begin{cases}
+\dot{x} \ (t\in{I_\Omega}) \\
+\displaystyle\lim_{\epsilon\to +0}\dot{x}(t\pm\epsilon)
+\end{cases}\]
+が定義できる.
+\begin{dfn}[完全反射]
+\label{reflect}
+$x(t)$が$t_{\ast}\in I_{\partial\Omega}$で\\
+\begin{equation}v^+ (t_\ast)=v^{-}(t_\ast)-2(v^{-}(t_\ast)\cdot\nu (x(t_\ast)))\nu (x(t_\ast))\end{equation}
+を満たすとき、$x(t)$は$t=t_{\ast}$において完全反射するという.
+\end{dfn}
+$f \in C^{0} ([0,T] \times \mathbb{R}^d \times \mathbb{R}^d ),x^0\in\Omega$とする.$x(t)$を$(\ast)$と
+\begin{equation}
+\begin{cases}
+\ddot{x}(t)=f(t,x(t),\dot{x}(t))\ (t\in I_{\Omega})\\
+x(0)=x^0\\
+t_\ast\in I_{\Omega}\text{で完全反射条件が成り立つ}
+\end{cases}
+\end{equation}
+を満たすとする.このとき、$x(t)$ を近似する差分法を構成せよ.
+$G$は$(6)$を満たすとする.
+\begin{equation}
+\begin{cases}
+\displaystyle\frac{\hat{y}^{k+1}-y^k}{\tau}=G(t_k,y^k;\tau)\ (k=0,\ldots ,\lfloor\frac{T}{\tau}\rfloor-1)\\
+y^0:y^*\\
+y^{k+1}=
+\begin{cases}
+y^{k+1}\ &(\text{if}\ \hat{x}^{k+1}\in\overline{\Omega})\ (k=0,\ldots ,\lfloor\frac{T}{\tau}\rfloor-1)\\
+R(y^k,\hat{y}^{k+1})\ &(\text{if}\ \hat{x}^{k+1}\notin\overline{\Omega})\ (k=0,\ldots ,\lfloor\frac{T}{\tau}\rfloor-1)
+\end{cases}
+\end{cases}
+\end{equation}
+の形の差分法を考える.
+\begin{hyp}
+\[\begin{cases}
+I_{\Omega}= \{s_1\},s_1\in (0,T),\\
+v^{-}(s_1)\cdot\nu(x(s_1))>0.
+\end{cases}\]
+\end{hyp}
+\medskip
+$\alpha>0$とし、境界での反射前後で解の延長を考える.$y^{-}_1(t):[0,s_1+\alpha]\rightarrow\mathbb{R}^{2d}$は次の方程式の解とし,
+\begin{equation}\left\{\begin{aligned}
+    &\dot{y}^{-}_1(t)=f(t,y^{-}_1(t))\ \ (0<t<s_1+\alpha)\\
+    &y(s_1)=(x(s_1),v^{-}(s_1))
+    \end{aligned}\right.
+\end{equation}
+$y^{+}_1(t):[s_1+\alpha,T]\rightarrow\mathbb{R}^{2d}$は次の方程式の解とする.
+\begin{equation}\left\{\begin{aligned}
+    &\dot{y}^{+}_1(t)=f(t,y^{+}_1(t))\ \ (s_1-\alpha<t<T)\\
+    &y(s_1)=(x(s_1),v^{+}(s_1))
+    \end{aligned}\right.
+\end{equation}
+ここで、この$y^-_1,y^+_1$は次を満たすことに注意する.
+\[y(t)=
+\begin{cases}
+y^{-}_1(t)\ (0\leq t<s_1),\\
+y^{+}_1(t)\ (s_1<t\leq T).
+\end{cases}
+\]
+$y^+_1$を近似する差分法
+\[\begin{cases}
+\displaystyle\frac{\tilde{y}^{k+1}-\tilde{y}^k}{\tau}=G(t_k,\tilde{y}^k;\tau)\ (k=0,\ldots ,\lfloor\frac{s_1+\alpha}{\tau}\rfloor-1)\\
+\tilde{y}^0\coloneqq y^*\\
+\end{cases}\]
+の解は定理\ref{th1}より$y^-_1$に収束する.
+\[
+    |y^-_1(t_k)-\tilde{y}^k|\le |y^0-y^\ast|+C_G[y^-_1]T\tau^p
+\]
+\begin{dfn}[符号付き距離関数]
+境界を$\Gamma$とする.\[
+d_s(x,\Gamma)\coloneqq
+\begin{cases}
++dist(x)\ (x\notin\bar{\Omega})\\
+-dist(x)\ (x\in\bar{\Omega})
+\end{cases}
+\]\end{dfn}
+これはLipschitz連続である.つまり任意の$x,z\in\mathbb{R}^d$に対して,
+\begin{equation}
+    |d_s(x)-d_s(z)|\le|x-z|
+\end{equation}
+また$\Gamma$が$C^n$級のとき,ある$\epsilon>0$が存在して,
+\begin{equation}
+d_s\in C^n(N^\epsilon (\Gamma))
+\end{equation}
+を満たす.ただし,$N^\epsilon(\Gamma)\coloneqq\{x\in\mathbb{R}^d|dist(x,\Gamma)<\epsilon\}$.
+また次が成り立つ.
+\begin{equation}\begin{cases}
+    d_s(x)\in[-\epsilon,0)&\Rightarrow\ x\in\Omega\cap N^\epsilon(\Gamma)\\
+    d_s(x)\in(0,\epsilon]&\Rightarrow\ x\in N^\epsilon(\Gamma)\backslash \bar{\Omega}
+\end{cases}\end{equation}
+
+\begin{lem}
+\label{dom}
+ある$\xi>0$が存在し,$|y_0-y^\ast|<\xi\tau$を満たすとし$p=1$とする.ある$\delta,\sigma>0$が存在して,$\tau<\frac{\delta}{1+\sigma}$のとき,
+\begin{equation}
+    \begin{cases}
+        (i)\ t_k\in [s_1-\delta,s_1-\sigma\tau ] \Rightarrow \tilde{x}^k\in\Omega\\
+        (ii)\ t_k\in [s_1+\sigma\tau, s_1+\delta ] \Rightarrow \tilde{x}^k\notin\Omega
+    \end{cases}
+\end{equation}
+が成り立つ.\\
+\end{lem}
+\begin{proof}
+    $x^-_1$は$t=s_1$で連続のなので,ある$\delta_1>0$g存在して,
+    \[
+        {}^\exists\delta_1>0,\ s.t.\ |t-s_1|\leq\delta_1\Rightarrow x^{-}_1(t)\in N^\epsilon(\Gamma)\\
+    \]
+が成り立つ.この$\delta_1$を用いて次のように記号を準備する.
+\begin{equation}\begin{cases}
+    M\coloneqq \underset{s_1-\delta_1\le t\le s_1+\delta_1}{max}|\ddot{\varphi}(t)|\\
+    \beta_1\coloneqq \frac{d}{dt}d_s(x^-_1(t))|_{t=s_1}\\
+    \delta\coloneqq min(\delta_1,\frac{\beta_1}{M})\\
+    r_0\coloneqq \xi + C_G[y^-_1]T\\
+    \sigma\coloneqq\frac{4r_0}{\beta_1}\\
+\end{cases}\end{equation}
+    $|t-s_1|<\delta_1$に対して,$x^-_1(t)\in N^\epsilon(\Gamma)$であり,(14)より$ds(x^-_1)$は$C^2$級.\\$d_s(x^{-}_1(t))\eqqcolon\varphi(t)$について$t=s_1$周りでテイラー展開すると,
+    \[d_s(x^{-}_1(t))=d_s(x^{-}_1(s_1))+(t-s_1)\dot{\varphi}(s_1)+\frac{1}{2}(t-s_1)^2\ddot{\varphi}(t_\ast)\]   
+ただし,$t_\ast\coloneqq (1-\theta)t+\theta s_1,\theta\in(0,1)$.\\
+    $d_s(x^{-}_1(s_1))=0$ということから
+    \[
+        d_s(x^{-}_1(t))=(t-s_1)\{\beta_1+\frac{1}{2}(t-s_1)\ddot{\varphi}(t_\ast)\}
+    \]
+ここで,$|t-s_1|<\delta$のとき,
+\begin{align*}
+    \beta_1+\frac{1}{2}(t-s_1)\ddot{\varphi}(t_\ast)
+    &\le \beta_1-\frac{1}{2}|t-s_1||\ddot{\varphi(t_\ast)}|\\
+    &\le \beta_1-\frac{\delta}{2}M\\
+    &\le \beta_1-\frac{1}{2}\frac{\beta_1}{M}M=\frac{\beta_1}{2}
+\end{align*}
+$\\(i)\ s_1-\delta<t_k\le s_1-\sigma\tau$の場合,(13)
+\[\begin{split}
+    d_s(\tilde{x}^k)&=d_s(x^{-}_1(t_k))+d_s(\tilde{x}^k)-d_s(x^{-}_1(t_k))\\
+                    &\le d_s(x^{-}_1(t_k))+|\tilde{x}^k-x^{-}_1(t_k)|\\
+                    &=(t_k-s_1)(\beta_1+\frac{1}{2}(t_k-s_1)\ddot{\varphi}(t_\ast))+|\tilde{x}^k-x^{-}_1(t_k)|\\
+                    &\le\frac{\beta_1}{2}(t_k-s_1)+|\tilde{y}^k-y^-_1(t_k)|\\
+                    &\le\frac{\beta_1}{2}(-\sigma\tau)+|y_0-y^\ast|+C_G[y^-_1]T\tau\\
+                    &=-(\frac{\sigma\beta_1}{2}-r_0)\tau<0\ 
+\end{split}\]
+$(ii)\ s_1+\sigma\tau\le t_k <s_1+\delta$の場合
+\[\begin{split}
+    d_s(\tilde{x}^k)&=d_s(x^{+}_1(t_k))+d_s(\tilde{x}^k)-d_s(x^{+}_1(t_k))\\
+                    &\ge d_s(x^{+}_1(t_k))-|x^{+}_1(t_k)-\tilde{x}^k|\\
+                    &=(s_1-t_k)(\beta_1+\frac{1}{2}(t_k-s_1)\ddot{\varphi}(t_\ast))-|x^{+}_1(t_k)-\tilde{x}^k|\\
+                    &\ge\frac{\beta_1}{2}(s_1-t_k)-|\tilde{y}^k-y^-_1(t_k)|\\
+                    &\ge\frac{\beta_1}{2}(\sigma\tau)-|y_0-y^\ast|+C_G[y^-_1]T\tau\\
+                    &=(\frac{\sigma\beta_1}{2}-r_0)\tau>0\ 
+\end{split}\]
+\end{proof}
+$\\$ 補題より
+\[{}^\exists k\ s.t. 
+\begin{cases}
+    |t-s_1|\le\sigma\tau\\
+    \{\tilde{x_\ell}\}_{\ell=0}^k \in\overline{\Omega},\ \tilde{x}^{k+1}\notin\overline{\Omega}
+\end{cases}\]
+$\\(i)\ 0\le\ell\le k,\ell\tau\le s_1$
+\[\Rightarrow|x(\ell\tau)-x^\ell|=|x^{-}_1(\ell\tau)-\tilde{x}^\ell|\le r(\tau)\]
+$(ii)\ 0\le\ell\le k,\ell\tau>s_1$
+\[\begin{split}
+    \Rightarrow|x(\ell\tau)-x^\ell|&=|x^{+}_1(\ell\tau)-\tilde{x}^\ell|\\
+                        &\le|x^{+}_1(\ell\tau)-x^{+}_1(s_1)|+|x^{+}_1(s_1)-x^{+}_1(\ell\tau)|+|x^{+}_1(\ell\tau)-\tilde{x}^\ell|\\
+                        &\le L\sigma\tau+L\sigma\tau+r(\tau)\\
+                        &\le (2L\sigma+r_0)\tau
+\end{split}\]
+$\\(iii)\ \ell\le k+1$の場合
+\[|y^\ell - y^{+}_1(t_\ell)|\le|y^{k+1}-y^+_1(t_{\ell+1})|+C_1[y^+_1]\tau^p\]
+\end{document}
