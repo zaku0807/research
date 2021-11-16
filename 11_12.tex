@@ -200,17 +200,19 @@ $y^+_1$を近似する差分法
 \tilde{y}^0\coloneqq y^*\\
 \end{cases}\]
 の解は定理\ref{th1}より$y^-_1$に収束する.
-\[
+\begin{equation}
     |y^-_1(t_k)-\tilde{y}^k|\le |y^0-y^\ast|+C_G[y^-_1]T\tau^p
-\]
+\end{equation}
+    
 \begin{dfn}[符号付き距離関数]
 境界を$\Gamma$とする.\[
-d_s(x,\Gamma)\coloneqq
+d_s(x)\coloneqq
 \begin{cases}
-+dist(x)\ (x\notin\bar{\Omega})\\
--dist(x)\ (x\in\bar{\Omega})
++\operatorname{dist}(x,\Gamma)\ (x\notin\overline{\Omega})\\
+-\operatorname{dist}(x,\Gamma)\ (x\in\overline{\Omega})
 \end{cases}
 \]\end{dfn}
+\medskip
 これはLipschitz連続である.つまり任意の$x,z\in\mathbb{R}^d$に対して,
 \begin{equation}
     |d_s(x)-d_s(z)|\le|x-z|
@@ -219,16 +221,16 @@ d_s(x,\Gamma)\coloneqq
 \begin{equation}
 d_s\in C^n(N^\epsilon (\Gamma))
 \end{equation}
-を満たす.ただし,$N^\epsilon(\Gamma)\coloneqq\{x\in\mathbb{R}^d|dist(x,\Gamma)<\epsilon\}$.
+を満たす.ただし,$N^\epsilon(\Gamma)\coloneqq\{x\in\mathbb{R}^d|\operatorname{dist}(x,\Gamma)<\epsilon\}$.
 また次が成り立つ.
 \begin{equation}\begin{cases}
-    d_s(x)\in[-\epsilon,0)&\Rightarrow\ x\in\Omega\cap N^\epsilon(\Gamma)\\
-    d_s(x)\in(0,\epsilon]&\Rightarrow\ x\in N^\epsilon(\Gamma)\backslash \bar{\Omega}
+    d_s(x)\in(-\epsilon,0)&\Rightarrow\ x\in\Omega\cap N^\epsilon(\Gamma)\\
+    d_s(x)\in(0,\epsilon)&\Rightarrow\ x\in N^\epsilon(\Gamma)\backslash \overline{\Omega}
 \end{cases}\end{equation}
 
 \begin{lem}
 \label{dom}
-ある$\xi>0$が存在し,$|y_0-y^\ast|<\xi\tau$を満たすとし$p=1$とする.ある$\delta,\sigma>0$が存在して,$\tau<\frac{\delta}{1+\sigma}$のとき,
+$\Gamma$が$C^3$級とする.さらに,ある$\xi>0$が存在し,$|y_0-y^\ast|<\xi\tau$を満たすとし,$p=1$とする.このとき,ある$\delta>0,\sigma>1$が存在して,$\tau<\frac{\delta}{1+\sigma}$のとき,
 \begin{equation}
     \begin{cases}
         (i)\ t_k\in [s_1-\delta,s_1-\sigma\tau ] \Rightarrow \tilde{x}^k\in\Omega\\
@@ -238,19 +240,20 @@ d_s\in C^n(N^\epsilon (\Gamma))
 が成り立つ.\\
 \end{lem}
 \begin{proof}
-    $x^-_1$は$t=s_1$で連続のなので,ある$\delta_1>0$g存在して,
-    \[
-        {}^\exists\delta_1>0,\ s.t.\ |t-s_1|\leq\delta_1\Rightarrow x^{-}_1(t)\in N^\epsilon(\Gamma)\\
-    \]
+    $x^-_1$は$t=s_1$で連続のなので,ある$\delta_1>0$が存在して,
+    \begin{equation}
+        |t-s_1|\leq\delta_1\Rightarrow x^{-}_1(t)\in N^\epsilon(\Gamma)
+    \end{equation}
 が成り立つ.この$\delta_1$を用いて次のように記号を準備する.
 \begin{equation}\begin{cases}
-    M\coloneqq \underset{s_1-\delta_1\le t\le s_1+\delta_1}{max}|\ddot{\varphi}(t)|\\
+    M\coloneqq \underset{s_1-\delta_1\le t\le s_1+\delta_1}{\max}|\ddot{\varphi}(t)|\\
     \beta_1\coloneqq \frac{d}{dt}d_s(x^-_1(t))|_{t=s_1}\\
-    \delta\coloneqq min(\delta_1,\frac{\beta_1}{M})\\
+    \delta\coloneqq \min(\delta_1,\frac{\beta_1}{M})\\
     r_0\coloneqq \xi + C_G[y^-_1]T\\
-    \sigma\coloneqq\frac{4r_0}{\beta_1}\\
+    \sigma\coloneqq \max\{\frac{4r_0}{\beta_1},1\}\\
 \end{cases}\end{equation}
     $|t-s_1|<\delta_1$に対して,$x^-_1(t)\in N^\epsilon(\Gamma)$であり,(14)より$ds(x^-_1)$は$C^2$級.\\$d_s(x^{-}_1(t))\eqqcolon\varphi(t)$について$t=s_1$周りでテイラー展開すると,
+    各$|t-s_1|<\delta_1$に対して,
     \[d_s(x^{-}_1(t))=d_s(x^{-}_1(s_1))+(t-s_1)\dot{\varphi}(s_1)+\frac{1}{2}(t-s_1)^2\ddot{\varphi}(t_\ast)\]   
 ただし,$t_\ast\coloneqq (1-\theta)t+\theta s_1,\theta\in(0,1)$.\\
     $d_s(x^{-}_1(s_1))=0$ということから
@@ -260,30 +263,31 @@ d_s\in C^n(N^\epsilon (\Gamma))
 ここで,$|t-s_1|<\delta$のとき,
 \begin{align*}
     \beta_1+\frac{1}{2}(t-s_1)\ddot{\varphi}(t_\ast)
-    &\le \beta_1-\frac{1}{2}|t-s_1||\ddot{\varphi(t_\ast)}|\\
-    &\le \beta_1-\frac{\delta}{2}M\\
-    &\le \beta_1-\frac{1}{2}\frac{\beta_1}{M}M=\frac{\beta_1}{2}
+    &\ge \beta_1-\frac{1}{2}|t-s_1||\ddot{\varphi(t_\ast)}|\\
+    &\ge \beta_1-\frac{\delta}{2}M\\
+    &\ge \beta_1-\frac{1}{2}\frac{\beta_1}{M}M=\frac{\beta_1}{2}
 \end{align*}
-$\\(i)\ s_1-\delta<t_k\le s_1-\sigma\tau$の場合,(13)
+以上より,(13)と(14)を用いて,(16)が導かれる.実際,
+$\\(i)\ s_1-\delta<t_k\le s_1-\sigma\tau$の場合,
 \[\begin{split}
     d_s(\tilde{x}^k)&=d_s(x^{-}_1(t_k))+d_s(\tilde{x}^k)-d_s(x^{-}_1(t_k))\\
                     &\le d_s(x^{-}_1(t_k))+|\tilde{x}^k-x^{-}_1(t_k)|\\
-                    &=(t_k-s_1)(\beta_1+\frac{1}{2}(t_k-s_1)\ddot{\varphi}(t_\ast))+|\tilde{x}^k-x^{-}_1(t_k)|\\
-                    &\le\frac{\beta_1}{2}(t_k-s_1)+|\tilde{y}^k-y^-_1(t_k)|\\
-                    &\le\frac{\beta_1}{2}(-\sigma\tau)+|y_0-y^\ast|+C_G[y^-_1]T\tau\\
+                    &\le (t_k-s_1)(\beta_1+\frac{1}{2}(t_k-s_1)\ddot{\varphi}(t_\ast))+|\tilde{y}^k-y^-_1(t_k)|\\
+                    &\le\frac{\beta_1}{2}(t_k-s_1)+|y_0-y^\ast|+C_G[y^-_1]T\tau\\
+                    &\le\frac{\beta_1}{2}(-\sigma\tau)+(\xi+C_G[y^-_1]T)\tau\\
                     &=-(\frac{\sigma\beta_1}{2}-r_0)\tau<0\ 
 \end{split}\]
 $(ii)\ s_1+\sigma\tau\le t_k <s_1+\delta$の場合
 \[\begin{split}
     d_s(\tilde{x}^k)&=d_s(x^{+}_1(t_k))+d_s(\tilde{x}^k)-d_s(x^{+}_1(t_k))\\
                     &\ge d_s(x^{+}_1(t_k))-|x^{+}_1(t_k)-\tilde{x}^k|\\
-                    &=(s_1-t_k)(\beta_1+\frac{1}{2}(t_k-s_1)\ddot{\varphi}(t_\ast))-|x^{+}_1(t_k)-\tilde{x}^k|\\
-                    &\ge\frac{\beta_1}{2}(s_1-t_k)-|\tilde{y}^k-y^-_1(t_k)|\\
-                    &\ge\frac{\beta_1}{2}(\sigma\tau)-|y_0-y^\ast|+C_G[y^-_1]T\tau\\
+                    &\ge(s_1-t_k)(\beta_1+\frac{1}{2}(t_k-s_1)\ddot{\varphi}(t_\ast))-|y^+_1(t_k)-\tilde{y}^k|\\
+                    &\ge\frac{\beta_1}{2}(s_1-t_k)-|y_0-y^\ast|-C_G[y^+_1]T\tau\\
+                    &\ge\frac{\beta_1}{2}(\sigma\tau)-(\xi+C_G[y^-_1]T)\tau\\
                     &=(\frac{\sigma\beta_1}{2}-r_0)\tau>0\ 
 \end{split}\]
 \end{proof}
-$\\$ 補題より
+$\\$ 補題1より
 \[{}^\exists k\ s.t. 
 \begin{cases}
     |t-s_1|\le\sigma\tau\\
