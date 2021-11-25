@@ -97,7 +97,7 @@ $T>0,t\in[0,T]$において$y(t)$を十分滑らかな関数とし、その数�
 \subsection{誤差}
 厳密解と数値解の誤差を$r^k\coloneqq y(t_k)-y^k\ (k=0,1,\ldots,N)$とする.
 \begin{thm}\label{th1}仮定$\ref{lip}$と(6)を満たすとき,$k=0,1,\ldots ,N,t\in[0,T]$に対して
-\[|r^{k}|\leq |r_0|+C_0T\tau^{p}\]
+\begin{equation}|r^{k}|\leq |r_0|+C_0T\tau^{p}\end{equation}
 が成り立つ.
 \end{thm}
 \begin{prf}
@@ -315,24 +315,27 @@ $\\(iii)\ \ell\le k+1$の場合
         \item$t_\ell\le k\tau$での$x^\ell,x^+(t_\ell)$の評価
         \begin{align*}
             \Rightarrow|x(\ell\tau)-x^\ell|&=|x^{+}_1(\ell\tau)-\tilde{x}^\ell|\\
-                                &\le|x^{+}_1(\ell\tau)-x^{+}_1(s_1)|+|x^{+}_1(s_1)-x^{+}_1(\ell\tau)|+|x^{+}_1(\ell\tau)-\tilde{x}^\ell|\\
+                                &\le|x^{+}_1(\ell\tau)-x^{+}_1(s_1)|+|x^{+}_1(s_1)-x^{-}_1(\ell\tau)|+|x^{-}_1(\ell\tau)-\tilde{x}^\ell|\\
                                 &\le L\sigma\tau+L\sigma\tau+r(\tau)\\
                                 &\le (2L\sigma+r_0)\tau
             \end{align*}
-        \item$t_\ell\ge (k+1)\tau$での$y^\ell,y^+(t_\ell)$の評価
-        \begin{enumerate}[(a).]
-            \item $x^\ell,x^+(t_\ell)$の評価
+        \item$t_\ell\ge (k+1)\tau$での$y^\ell,y^+(t_\ell)$の評価\\
+            $(a).x^\ell,x^+(t_\ell)$の評価
             \begin{align*}
-            |x(t_\ell)-x^\ell|&=|x^+_1(s_1)+\int^{t_\ell}_{s_1}v^+_1(t)dt-(z+(1-\theta)\tau(v^{\ell-1}-2(v^{\ell-1}\cdot\nu(z))\nu(z)))|\\
-                          &\leq |x^+_1(s_1)-z|+|(1-\theta)\tau(v^{\ell-1}-2(v^{\ell-1}\cdot\nu(z))\nu(z))|+|\int^{t_\ell}_{s_1}v(t)dt|
+            |x^+_1(t_\ell)-x^{k+1}|&=|x^+_1(s_1)+\int^{t_\ell}_{s_1}v^+_1(t)dt-(x^\ast+\theta\tau(v^{k}-2(v^{k}\cdot\nu(x^\ast))\nu(x^\ast)))|\\
+                          &\leq |x^+_1(s_1)-x^\ast|+|\theta\tau(v^{\ell-1}-2(v^{\ell-1}\cdot\nu(z))\nu(z))|+|\int^{t_\ell}_{s_1}v_1^+(t)dt|
             \end{align*}
-            \item $v^\ell,v^+(t_\ell)$の評価
-        \end{enumerate}
+            $(b).v^\ell,v^+(t_\ell)$の評価
+            \begin{align*}
+            |v(t_\ell)-v^\ell|&=|v_1^+(s_1)+\int^{(k+1)\tau}_{s_1}f(t,y(t))dt-(v^{\ell-1}-2(v^{\ell-1}\cdot\nu(z))\nu(z)))|\\
+                              &\le |v_1^-(s_1)-v^{\ell-1}|+2|(v^{\ell-1}\cdot\nu(z))\nu(z))-(v_1^-(s_1)\cdot\nu(y(s_1)))\nu(y(s_1)))|\\
+                              &\ \ \ \ \ \ \ +|\int^{(k+1)\tau}_{s_1}f(t,y_1^+(t))dt|
+            \end{align*}
     \end{enumerate}
     \item$t_k<s_1$の場合
     \begin{enumerate}[(i).]
-        \item $t_\ell\le k\tau$での$x^\ell,x^+(t_\ell)$の評価\[a=a\]
-        \item $t_\ell\ge (k+1)\tau$での$y^\ell,y^+(t_\ell)$の評価\[a=a\]
+        \item $t_\ell>s_1$での$x^\ell,x^+(t_\ell)$の評価\[a=a\]
+        \item $(k+1)\tau\le t_\ell<s_1$での$y^\ell,y^+(t_\ell)$の評価\[a=a\]
     \end{enumerate}
 \end{enumerate}
 
